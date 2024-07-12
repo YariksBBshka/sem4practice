@@ -7,99 +7,86 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Patient", schema = "public")
-public class Patient {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "patient_id", nullable = false)
-    private Long id;
+@Table(name = "patient", schema = "public")
+public class Patient extends BaseEntity{
+    private String firstname;
+    private String lastname;
+    private LocalDate dateOfBirth;
+    private String address;
+    private String phoneNumber;
+    private String clientStatus;
 
     @Column(name = "firstname", nullable = false, length = 100)
-    private String firstname;
+    public String getFirstname() {
+        return firstname;
+    }
 
     @Column(name = "lastname", nullable = false, length = 100)
-    private String lastname;
+    public String getLastname() {
+        return lastname;
+    }
 
     @Column(name = "date_of_birth", nullable = false)
-    private LocalDate dateOfBirth;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
 
     @Column(name = "address", nullable = false, length = 50)
-    private String address;
+    public String getAddress() {
+        return address;
+    }
 
     @Column(name = "phone_number", nullable = false, length = 50)
-    private String phoneNumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
-    @OneToMany(mappedBy = "fkPatient")
-    private Set<Appointment> appointments = new LinkedHashSet<>();
+    @Column(name = "client_status", nullable = false, length = 50)
+    public String getClientStatus() {
+        return clientStatus;
+    }
 
-    public Patient(Long id, String firstname, String lastname, LocalDate dateOfBirth, String address, String phoneNumber, Set<Appointment> appointments) {
-        this.id = id;
+    public Patient(String firstname, String lastname, LocalDate dateOfBirth, String address, String phoneNumber, String clientStatus) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.appointments = appointments;
+        this.clientStatus = clientStatus;
     }
 
-    public Patient(){
 
-    }
+    protected Patient(){
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstname() {
-        return firstname;
     }
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
-
-    public String getLastname() {
-        return lastname;
-    }
-
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
-
-    public String getAddress() {
-        return address;
-    }
-
     public void setAddress(String address) {
         this.address = address;
     }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
-    public Set<Appointment> getAppointments() {
-        return appointments;
+    public void setClientStatus(String clientStatus) {
+        this.clientStatus = clientStatus;
     }
 
-    public void setAppointments(Set<Appointment> appointments) {
-        this.appointments = appointments;
-    }
+//    public Set<Appointment> getAppointments() {
+//        return appointments;
+//    }
+//
+//    public void setAppointments(Set<Appointment> appointments) {
+//        this.appointments = appointments;
+//    }
+//    @OneToMany(mappedBy = "fkPatient")
+//    private Set<Appointment> appointments = new LinkedHashSet<>();
 
 }
