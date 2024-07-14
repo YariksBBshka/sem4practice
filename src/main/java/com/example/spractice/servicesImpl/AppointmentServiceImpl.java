@@ -1,8 +1,6 @@
 package com.example.spractice.servicesImpl;
 
-import com.example.spractice.entities.Appointment;
-import com.example.spractice.entities.AppointmentStatus;
-import com.example.spractice.entities.Doctor;
+import com.example.spractice.entities.*;
 import com.example.spractice.repositories.AppointmentRepository;
 import com.example.spractice.repositories.DoctorRepository;
 import com.example.spractice.repositories.PatientRepository;
@@ -11,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -24,18 +23,61 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public boolean bookAppointment(Appointment appointment) {
-        // implement booking logic
-        return true;
+        Doctor doctor = doctorRepository.findByFirstnameAndLastname(appointment.getFkDoctor().getFirstname(), appointment.getFkDoctor().getLastname());
+        if (doctor == null) {
+            throw new RuntimeException("Doctor not found");
+        }
+        Patient patient = patientRepository.findByFirstnameAndLastname(appointment.getFkPatient().getFirstname(), appointment.getFkPatient().getLastname());
+        if (patient == null) {
+            throw new RuntimeException("Patient not found");
+        }
+
+        if (isTimeAvailable(doctor, appointment.getAppointmentDate(), appointment.getAppointmentTime(), patient.getClientStatus())) {
+            appointment.setStatus(String.valueOf(AppointmentStatus.BOOKED));
+            appointmentRepository.save(appointment);
+            return true;
+        } else {
+            // send message that time is not available
+            return false;
+        }
     }
 
     @Override
     public void completeAppointment(Long appointmentId) {
-        // implement completion logic
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow();
+        appointment.setStatus(String.valueOf(AppointmentStatus.COMPLETED));
+        appointmentRepository.save(appointment);
     }
 
     @Override
     public void cancelAppointment(Long appointmentId) {
-        // implement cancellation logic
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow();
+        appointment.setStatus(String.valueOf(AppointmentStatus.CANCELLED));
+        appointmentRepository.save(appointment);
+    }
+
+    private boolean isTimeAvailable(Doctor doctor, LocalDate date, LocalTime time, String patientStatus) {
+        // check if time is within working hours
+        if (time.isBefore(LocalTime.of(10, 0)) || time.isAfter(LocalTime.of(18, 0))) {
+            if (patientStatus.equals(PatientStatus.VIP.name())) {
+                // VIP patients can book from 10 to 19
+                if (time.isAfter(LocalTime.of(19, 0))) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
+        // check if time is already booked for the doctor on the given date
+        List<Appointment> appointments = appointmentRepository.findByDoctorAndDate(doctor, date);
+        for (Appointment existingAppointment : appointments) {
+            if (existingAppointment.getAppointmentTime().equals(time)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
