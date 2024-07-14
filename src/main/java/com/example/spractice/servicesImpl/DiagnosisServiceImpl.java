@@ -1,4 +1,7 @@
 package com.example.spractice.servicesImpl;
 
-public class DiagnosisServiceImpl {
+import com.example.spractice.services.DiagnosisService;
+
+public class DiagnosisServiceImpl implements DiagnosisService {
+
 }

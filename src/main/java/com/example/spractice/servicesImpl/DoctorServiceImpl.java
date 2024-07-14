@@ -14,28 +14,44 @@ import java.util.List;
 
 @Service
 public class DoctorServiceImpl  implements DoctorService {
-
     @Autowired
     private DoctorRepository doctorRepository;
-    @Autowired
-    private PatientRepository patientRepository;
-    @Autowired
-    private AppointmentRepository appointmentRepository;
+
+    @Override
+    public Doctor getDoctorByFirstnameAndLastname(String firstname, String lastname) {
+        return doctorRepository.findByFirstnameAndLastname(firstname, lastname);
+    }
 
     @Override
     public List<Doctor> getAllDoctors() {
-        return null;
+        return doctorRepository.findAll();
     }
 
     @Override
     public Doctor getDoctorById(Long id) {
-        return null;
+        return doctorRepository.findById(id).orElseThrow();
     }
 
     @Override
-    public List<Appointment> getAvailableAppointments(Doctor doctor, Date date) {
-        return null;
+    public void createDoctor(Doctor doctor) {
+        doctorRepository.save(doctor);
     }
+
+    @Override
+    public void updateDoctor(Doctor doctor) {
+        doctorRepository.save(doctor);
+    }
+
+    @Override
+    public void deleteDoctor(Long id) {
+        doctorRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Doctor> getDoctorsBySpeciality(String speciality) {
+        return doctorRepository.findBySpeciality(speciality);
+    }
+
 }
 
 

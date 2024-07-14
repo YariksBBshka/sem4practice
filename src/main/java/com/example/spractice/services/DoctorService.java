@@ -7,8 +7,12 @@ import java.util.Date;
 import java.util.List;
 
 public interface DoctorService {
+    Doctor getDoctorByFirstnameAndLastname(String firstname, String lastname);
     List<Doctor> getAllDoctors();
     Doctor getDoctorById(Long id);
-    List<Appointment> getAvailableAppointments(Doctor doctor, Date date);
+    void createDoctor(Doctor doctor);
+    void updateDoctor(Doctor doctor);
+    void deleteDoctor(Long id);
+    List<Doctor> getDoctorsBySpeciality(String speciality);
 
 }
