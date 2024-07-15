@@ -12,10 +12,15 @@ import java.util.List;
 
 @Service
 public class PatientServiceImpl implements PatientService {
-    @Autowired
-    private PatientRepository patientRepository;
-    @Autowired
-    private DiagnosisRepository diagnosisRepository;
+
+    private final PatientRepository patientRepository;
+
+    private final DiagnosisRepository diagnosisRepository;
+
+    public PatientServiceImpl(PatientRepository patientRepository, DiagnosisRepository diagnosisRepository) {
+        this.patientRepository = patientRepository;
+        this.diagnosisRepository = diagnosisRepository;
+    }
 
     @Override
     public Patient getPatientByFirstnameAndLastname(String firstname, String lastname) {

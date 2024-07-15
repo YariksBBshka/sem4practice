@@ -14,12 +14,17 @@ import java.util.List;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
+
+    private final AppointmentRepository appointmentRepository;
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
+
     @Autowired
-    private AppointmentRepository appointmentRepository;
-    @Autowired
-    private DoctorRepository doctorRepository;
-    @Autowired
-    private PatientRepository patientRepository;
+    public AppointmentServiceImpl(AppointmentRepository appointmentRepository, DoctorRepository doctorRepository, PatientRepository patientRepository) {
+        this.appointmentRepository = appointmentRepository;
+        this.doctorRepository = doctorRepository;
+        this.patientRepository = patientRepository;
+    }
 
     @Override
     public boolean bookAppointment(Appointment appointment) {

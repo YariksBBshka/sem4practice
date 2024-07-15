@@ -6,15 +6,19 @@ import com.example.spractice.repositories.DiagnosisRepository;
 import com.example.spractice.repositories.TreatmentRepository;
 import com.example.spractice.services.TreatmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class TreatmentServiceImpl implements TreatmentService {
 
+    private final TreatmentRepository treatmentRepository;
+    private final DiagnosisRepository diagnosisRepository;
     @Autowired
-    private TreatmentRepository treatmentRepository;
-    @Autowired
-    private DiagnosisRepository diagnosisRepository;
+    public TreatmentServiceImpl(TreatmentRepository treatmentRepository, DiagnosisRepository diagnosisRepository) {
+        this.treatmentRepository = treatmentRepository;
+        this.diagnosisRepository = diagnosisRepository;
+    }
 
     @Override
     public List<Treatment> getTreatmentsByDiagnosis(Long diagnosisId) {

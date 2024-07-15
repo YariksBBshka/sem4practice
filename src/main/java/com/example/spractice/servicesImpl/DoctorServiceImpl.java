@@ -14,8 +14,13 @@ import java.util.List;
 
 @Service
 public class DoctorServiceImpl  implements DoctorService {
+
+    private final DoctorRepository doctorRepository;
+
     @Autowired
-    private DoctorRepository doctorRepository;
+    public DoctorServiceImpl(DoctorRepository doctorRepository) {
+        this.doctorRepository = doctorRepository;
+    }
 
     @Override
     public Doctor getDoctorByFirstnameAndLastname(String firstname, String lastname) {
